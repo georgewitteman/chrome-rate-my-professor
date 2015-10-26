@@ -55,7 +55,9 @@ $(function() {
             changeState("loading");
         } else if(searchField.value == "empty") {
             changeState("empty");
-        } startEverything();
+        } else {
+            startEverything();
+        }
     });
 });
 
@@ -129,11 +131,7 @@ function changeState(stateName) {
                 document.getElementById('logo_home').id = 'logo';
                 document.getElementById('input_field_home').id = 'input_field';
             }
-            var count = 0;
-            setInterval(function(){
-                count++;
-                document.getElementById('loading').innerHTML = "Loading." + new Array(count % 10).join('.');
-            }, 100);
+            break;
         default: break;
     }
 }
