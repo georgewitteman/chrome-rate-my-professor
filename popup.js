@@ -1,7 +1,6 @@
 /***************************************************************************************************
  *
  *  RateMyProfessors Viewer
- *  -- Javascript code
  *  by George Witteman
  *
 ***************************************************************************************************/
@@ -22,6 +21,7 @@ $(function(){
             var selectedText = response.data;
             searchField.value = selectedText.trim();
             if(checkProfText(searchField.value)) {
+                changeState("loading");
                 startEverything();
             }
         });
@@ -48,7 +48,10 @@ $(function(){
 
 $(function() {
     $("#view_rating").click(function(event) {
-        startEverything();
+        var searchField = document.getElementById('professor');
+        if(searchField.value == "loading") {
+            changeState("loading");
+        } else startEverything();
     });
 });
 
@@ -91,16 +94,43 @@ function isTID(aTID) {
 }
 
 function changeState(stateName) {
-    if(stateName.toLowerCase() == "home") {
-        if(document.getElementById('logo') != null) {
-            document.getElementById('logo').id = 'logo_home';
-            document.getElementById('input_field').id = 'input_field_home';
-        }
-    } else if(stateName.toLowerCase() == "search") {
-        if(document.getElementById('logo_home') != null) {
-            document.getElementById('logo_home').id = 'logo';
-            document.getElementById('input_field_home').id = 'input_field';
-        }
+    switch(stateName) {
+        case "home":
+            document.getElementById('main_body').style.display = "block";
+            document.getElementById('loading').style.display = "none";
+            if(document.getElementById('logo') != null) {
+                document.getElementById('logo').id = 'logo_home';
+                document.getElementById('input_field').id = 'input_field_home';
+            }
+            break;
+        case "search":
+            document.getElementById("errorArea").style.display = "none";
+            document.getElementById("ratings").style.display = "block";
+            document.getElementById('main_body').style.display = "block";
+            document.getElementById('loading').style.display = "none";
+            if(document.getElementById('logo_home') != null) {
+                document.getElementById('logo_home').id = 'logo';
+                document.getElementById('input_field_home').id = 'input_field';
+            }
+            break;
+        case "empty":
+            document.getElementById('main_body').style.display = "none";
+            break;
+        case "loading":
+            document.getElementById("errorArea").style.display = "none";
+            document.getElementById("ratings").style.display = "none";
+            document.getElementById('main_body').style.display = "block";
+            document.getElementById('loading').style.display = "block";
+            if(document.getElementById('logo_home') != null) {
+                document.getElementById('logo_home').id = 'logo';
+                document.getElementById('input_field_home').id = 'input_field';
+            }
+            var count = 0;
+            setInterval(function(){
+                count++;
+                document.getElementById('loading').innerHTML = "Loading." + new Array(count % 10).join('.');
+            }, 100);
+        default: break;
     }
 }
 
@@ -172,6 +202,7 @@ function parseComments(commentsSource) {
 function startEverything() {
     chrome.storage.sync.get("college", function(response) {
         var college = response["college"];
+        changeState("loading");
         if(!college) {
             chrome.tabs.create({ 'url': 'chrome://extensions/?options=' + chrome.runtime.id });
         }
@@ -243,8 +274,7 @@ function getRating(tid) {
 
 // Prints the rating in the popup
 function viewRating(ratings,url,name,numRatings, comments) {
-    document.getElementById("errorArea").style.display = "none";
-    document.getElementById("ratings").style.display = "block";
+
     changeState("search");
 
     document.getElementById("professor").value = name;

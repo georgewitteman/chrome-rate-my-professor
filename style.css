@@ -115,7 +115,8 @@ ul#ratings {
     margin-bottom: 5px;
 }
 
-#errorArea {
+#errorArea,
+#loading {
     padding:5px;
     padding-top: 0;
 }
