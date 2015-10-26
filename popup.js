@@ -17,12 +17,14 @@ $(function(){
     function(tab) {
         chrome.tabs.sendMessage(tab[0].id, {method: "getSelection"},
         function(response){
+            changeState("loading");
             var searchField = document.getElementById('professor');
             var selectedText = response.data;
             searchField.value = selectedText.trim();
             if(checkProfText(searchField.value)) {
-                changeState("loading");
                 startEverything();
+            } else {
+                changeState("home");
             }
         });
     });
@@ -51,7 +53,9 @@ $(function() {
         var searchField = document.getElementById('professor');
         if(searchField.value == "loading") {
             changeState("loading");
-        } else startEverything();
+        } else if(searchField.value == "empty") {
+            changeState("empty");
+        } startEverything();
     });
 });
 
@@ -202,7 +206,7 @@ function parseComments(commentsSource) {
 function startEverything() {
     chrome.storage.sync.get("college", function(response) {
         var college = response["college"];
-        changeState("loading");
+
         if(!college) {
             chrome.tabs.create({ 'url': 'chrome://extensions/?options=' + chrome.runtime.id });
         }
