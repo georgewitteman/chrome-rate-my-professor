@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <script src="jquery.min.js"></script>
+        <script src="popup.js"></script>
+        <link rel="stylesheet" href="style.css"/>
+    </head>
+    <body>
+
+        <div id="row" class="clearfix">
+            <div id="logo_home">
+                R
+            </div>
+            <div id="input_field_home">
+                <input autofocus id="professor" type="text" placeholder="Professors Name">
+                <button id="view_rating" type="submit">Find</button>
+            </div>
+        </div>
+        <div id="errorArea" style="display:none;">
+
+        </div>
+        <ul id="ratings" style="display:none;">
+                <div class="row">
+                    <div>
+                        <span class="label bigLabel">Overall Quality</span>
+                    </div>
+                    <div>
+                        <span class="rating bigRating" id="overallRating">5.0</span>
+                    </div>
+                </div>
+                <div class="row center">
+                    Based on
+                    <span id="numRatings">0</span>
+                    ratings.
+                </div>
+                <li class="row">
+                    <span class="label">Average Grade</span>
+                    <span class="rating" id="gradeRating">A+</span>
+                </li>
+                <li class="row">
+                    <span class="label">Helpfulness</span>
+                    <span class="rating" id="helpRating">5.0</span>
+                </li>
+                <li class="row">
+                    <span class="label">Clarity</span>
+                    <span class="rating" id="clarityRating">5.0</span>
+                </li>
+                <li class="row">
+                    <span class="label">Easiness</span>
+                    <span class="rating" id="easyRating">5.0</span>
+                </li>
+                <div class="row" id="comments">
+                </div>
+                <div class="row center" id="webLink">
+                </div>
+            </div>
+        </ul>
+    </body>
+</html>

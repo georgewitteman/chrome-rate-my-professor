@@ -1,0 +1,34 @@
+{
+ "name": "RateMyProfessors Viewer",
+ "version": "0.5",
+ "description": "Allows you to view the ratings of any professor on RateMyProfessors",
+ "manifest_version": 2,
+ "browser_action": {
+   "default_title": "RateMyProfessors Viewer",
+   "default_icon": {
+     "19": "images/icon38.png",
+     "38": "images/icon76.png"
+   },
+   "default_popup": "popup.html"
+ },
+ "options_ui": {
+     "page": "options.html",
+     "chrome_style": true
+   },
+ "permissions": [
+   "storage",
+   "tabs"
+ ],
+ "icons": { "16": "images/icon32.png",
+            "48": "images/icon96.png",
+            "128": "images/icon256.png"
+},
+ "content_scripts": [
+   {
+     "matches": ["<all_urls>"],
+     "js": ["selection.js"],
+     "run_at": "document_start",
+     "all_frames": true
+   }
+ ]
+}
