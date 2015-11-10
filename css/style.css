@@ -122,6 +122,22 @@ ul#ratings {
 }
 
 .comment {
-    margin-bottom: 5px;
-    padding: 5px;
+    padding: 10px;
+    border-bottom: 1px solid black;
+}
+
+.comment:first-of-type {
+    border-top: 1px solid black;
+    margin-top: 10px;
+}
+
+.comment_text {
+    display:block;
+    margin-left: 110px;
+}
+
+.comment_rating {
+    float:left;
+    width: 110px;
+    padding: 0;
 }

@@ -62,11 +62,12 @@ function parseComments(commentsSource) {
     //DEBUG: console.log(commenterRating);
     var commentsHTML = "";
     for(i = 0; i < commentsElements.length; i++) {
-        commentsHTML += "<div class=\"comment\">";
+        commentsHTML += "<div class=\"comment clearfix\">";
         commentsHTML += "<div class=\"comment_rating\">" +
-                        commenterRating[i].children[1].innerHTML + "</div>";
+                        commenterRating[i].children[1].innerHTML +
+                        "</div><div class=\"comment_text\">";
         commentsHTML += commentsElements[i].innerHTML.replace(/(\r\n|\n|\r)/gm," ").replace(/\s+/g," ");
-        commentsHTML += "</div>\n";
+        commentsHTML += "</div></div>\n";
     }
 
     return commentsHTML;
