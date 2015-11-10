@@ -63,139 +63,6 @@ $(function() {
 
 /*
 ====================================================================================================
-== HELPER FUNCTIONS ================================================================================
-====================================================================================================
-*/
-
-// Check if inputed text is actually a professor
-function checkProfText(input) {
-    if(input == null || input == "" || input == "+") {
-        return false;
-    } else {
-        return true;
-    }
-}
-
-// Parse the inputed name
-function formatName(theName) {
-    var name = theName;
-    name.trim();
-    name = name.replace(/[^a-zA-Z0-9]+/g, "+");
-
-    return name;
-}
-
-// Prints the given error message in the popup
-function printError(theError) {
-    changeState("search");
-    document.getElementById("errorArea").style.display = "block";
-    var errorArea = document.getElementById('errorArea');
-    errorArea.innerHTML = theError;
-    document.getElementById("ratings").style.display = "none";
-}
-
-// Check to make sure TID is valid
-function isTID(aTID) {
-    return !isNaN(parseFloat(aTID)) && isFinite(aTID);
-}
-
-function changeState(stateName) {
-    switch(stateName) {
-        case "home":
-            document.getElementById('main_body').style.display = "block";
-            document.getElementById('loading').style.display = "none";
-            if(document.getElementById('logo') != null) {
-                document.getElementById('logo').id = 'logo_home';
-                document.getElementById('input_field').id = 'input_field_home';
-            }
-            break;
-        case "search":
-            document.getElementById("errorArea").style.display = "none";
-            document.getElementById("ratings").style.display = "block";
-            document.getElementById('main_body').style.display = "block";
-            document.getElementById('loading').style.display = "none";
-            if(document.getElementById('logo_home') != null) {
-                document.getElementById('logo_home').id = 'logo';
-                document.getElementById('input_field_home').id = 'input_field';
-            }
-            break;
-        case "empty":
-            document.getElementById('main_body').style.display = "none";
-            break;
-        case "loading":
-            document.getElementById("errorArea").style.display = "none";
-            document.getElementById("ratings").style.display = "none";
-            document.getElementById('main_body').style.display = "block";
-            document.getElementById('loading').style.display = "block";
-            if(document.getElementById('logo_home') != null) {
-                document.getElementById('logo_home').id = 'logo';
-                document.getElementById('input_field_home').id = 'input_field';
-            }
-            break;
-        default: break;
-    }
-}
-
-/*
-====================================================================================================
-== PARSERS =========================================================================================
-====================================================================================================
-*/
-
-// Parses the TID from the source code from search page
-function parseTID(searchSource) {
-    // Get the
-    var start_index = searchSource.indexOf('<li class="listing PROFESSOR">');
-    var end_index = searchSource.indexOf('</li>', start_index) + 4;
-    var text = searchSource.substring(start_index, end_index);
-
-    // Parse TID numbers
-    start_index = text.indexOf('tid=') + 4;
-    end_index = text.indexOf('"', start_index);
-
-    return text.substring(start_index, end_index);
-}
-
-// Parses the professor name from the professor page
-function parseProfName(searchSource) {
-    var text = searchSource.getElementsByClassName("result-name");
-    return text[0].innerText.replace(/\s+/g,' ').trim();
-}
-
-// Parses the professor name from the professor page
-function parseNumRatings(searchSource) {
-    var text = searchSource.getElementsByClassName("table-toggle rating-count active");
-    return text[0].innerText.replace ( /[^\d.]/g, '' );;
-}
-
-// Parses the rating information from the professor rating page
-function parseRatings(ratingSource) {
-    var mainRatingsElement = ratingSource.getElementsByClassName("breakdown-wrapper")[0];
-    var mainRatings = mainRatingsElement.getElementsByClassName("grade");
-    var otherRatingsElement = ratingSource.getElementsByClassName("faux-slides")[0];
-    var otherRatings = otherRatingsElement.getElementsByClassName("rating");
-
-    var a1 = Array.prototype.slice.call(mainRatings);
-
-    var a2 = Array.prototype.slice.call(otherRatings);
-
-    var ratings = a1.concat(a2);
-
-    ratings.splice(2,1); // Get rid of hotness
-    return ratings;
-}
-
-function parseComments(commentsSource) {
-    var commentsElements = commentsSource.getElementsByClassName("commentsParagraph");
-    var commentsHTML = "";
-    for(i = 0; i < commentsElements.length; i++) {
-        commentsHTML += "<div class=\"comment\">" + commentsElements[i].innerHTML.replace(/(\r\n|\n|\r)/gm," ").replace(/\s+/g," ") + "</div>\n";
-    }
-    return commentsHTML;
-}
-
-/*
-====================================================================================================
 == MAIN FUNCTIONS ==================================================================================
 ====================================================================================================
 */
@@ -251,8 +118,6 @@ function getTID(professor, college) {
     xhr.send();
 }
 
-
-
 // Gets the rating from the RateMyProfessors page
 function getRating(tid) {
     var xhr = new XMLHttpRequest();
@@ -264,43 +129,39 @@ function getRating(tid) {
     xhr.responseType = 'document';
     xhr.onload = function(e) {
         var source = this.response;
-        var ratings = parseRatings(source);
-        var name = parseProfName(source);
-        var numRatings = parseNumRatings(source);
-        var comments = parseComments(source);
+        var ratings = parseEverything(source);
 
-        viewRating(ratings,url,name,numRatings, comments);
+        viewRating(ratings, url);
     };
     xhr.send();
 }
 
 // Prints the rating in the popup
-function viewRating(ratings,url,name,numRatings, comments) {
-
+function viewRating(ratings, url) {
     changeState("search");
 
-    document.getElementById("professor").value = name;
+    document.getElementById("professor").value = ratings["name"];
 
     var numberRatings = document.getElementById('numRatings');
-    numberRatings.innerHTML = numRatings;
+    numberRatings.innerHTML = ratings["numRatings"];
 
     var overallRating = document.getElementById('overallRating');
-    overallRating.innerHTML = ratings[0].innerHTML;
+    overallRating.innerHTML = ratings["ratings"][0].innerHTML;
 
     var gradeRating = document.getElementById('gradeRating');
-    gradeRating.innerHTML = ratings[1].innerHTML;
+    gradeRating.innerHTML = ratings["ratings"][1].innerHTML;
 
     var helpRating = document.getElementById('helpRating');
-    helpRating.innerHTML = ratings[2].innerHTML;
+    helpRating.innerHTML = ratings["ratings"][2].innerHTML;
 
     var clarityRating = document.getElementById('clarityRating');
-    clarityRating.innerHTML = ratings[3].innerHTML;
+    clarityRating.innerHTML = ratings["ratings"][3].innerHTML;
 
     var easyRating = document.getElementById('easyRating');
-    easyRating.innerHTML = ratings[4].innerHTML;
+    easyRating.innerHTML = ratings["ratings"][4].innerHTML;
 
     var commentsBox = document.getElementById('comments');
-    commentsBox.innerHTML = comments;
+    commentsBox.innerHTML = ratings["comments"];
 
     var webLink = document.getElementById("webLink");
     webLink.innerHTML = "<a href=" + url + ">View full review on RateMyProfessors.com</a>";
