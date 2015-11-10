@@ -52,14 +52,14 @@ function parseRatings(ratingSource) {
 
     var ratings = a1.concat(a2);
 
-    ratings.splice(2,1); // Get rid of hotness
+    ratings.splice(2,1); // Get rid of "hotness"
     return ratings;
 }
 
 function parseComments(commentsSource) {
     var commentsElements = commentsSource.getElementsByClassName("commentsParagraph");
     var commenterRating = commentsSource.getElementsByClassName("rating-block");
-    console.log(commenterRating);
+    //DEBUG: console.log(commenterRating);
     var commentsHTML = "";
     for(i = 0; i < commentsElements.length; i++) {
         commentsHTML += "<div class=\"comment\">";

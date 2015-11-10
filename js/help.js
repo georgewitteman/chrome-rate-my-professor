@@ -36,11 +36,11 @@ function isTID(aTID) {
     return !isNaN(parseFloat(aTID)) && isFinite(aTID);
 }
 
+// Change the state of all of the fields
 function changeState(stateName) {
-    switch(stateName) {
+    switch(stateName.toLowerCase()) {
         case "home":
             document.getElementById('main_body').style.display = "block";
-            document.getElementById('loading').style.display = "none";
             if(document.getElementById('logo') != null) {
                 document.getElementById('logo').id = 'logo_home';
                 document.getElementById('input_field').id = 'input_field_home';
@@ -50,7 +50,6 @@ function changeState(stateName) {
             document.getElementById("errorArea").style.display = "none";
             document.getElementById("ratings").style.display = "block";
             document.getElementById('main_body').style.display = "block";
-            document.getElementById('loading').style.display = "none";
             if(document.getElementById('logo_home') != null) {
                 document.getElementById('logo_home').id = 'logo';
                 document.getElementById('input_field_home').id = 'input_field';
@@ -58,16 +57,6 @@ function changeState(stateName) {
             break;
         case "empty":
             document.getElementById('main_body').style.display = "none";
-            break;
-        case "loading":
-            document.getElementById("errorArea").style.display = "none";
-            document.getElementById("ratings").style.display = "none";
-            document.getElementById('main_body').style.display = "block";
-            document.getElementById('loading').style.display = "block";
-            if(document.getElementById('logo_home') != null) {
-                document.getElementById('logo_home').id = 'logo';
-                document.getElementById('input_field_home').id = 'input_field';
-            }
             break;
         default: break;
     }

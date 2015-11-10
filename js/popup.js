@@ -17,7 +17,6 @@ $(function(){
     function(tab) {
         chrome.tabs.sendMessage(tab[0].id, {method: "getSelection"},
         function(response){
-            changeState("loading");
             var searchField = document.getElementById('professor');
             var selectedText = response.data;
             searchField.value = selectedText.trim();
@@ -51,9 +50,7 @@ $(function(){
 $(function() {
     $("#view_rating").click(function(event) {
         var searchField = document.getElementById('professor');
-        if(searchField.value == "loading") {
-            changeState("loading");
-        } else if(searchField.value == "empty") {
+        if(searchField.value == "empty") {
             changeState("empty");
         } else {
             startEverything();
@@ -75,13 +72,13 @@ function startEverything() {
         if(!college) {
             chrome.tabs.create({ 'url': 'chrome://extensions/?options=' + chrome.runtime.id });
         }
-        console.log("College Name: " + college);
+        //console.log("College Name: " + college); // DEBUG
 
         var professorName = document.getElementById("professor").value;
-        console.log("professorName before format: " + professorName);
+        //console.log("professorName before format: " + professorName); // DEBUG
 
         professorName = formatName(professorName);
-        console.log("professorName: " + professorName);
+        //console.log("professorName: " + professorName); // DEBUG
 
         if(checkProfText(professorName)) {
             getTID(professorName, college);
@@ -96,8 +93,10 @@ function getTID(professor, college) {
     var name = professor;
     college = formatName(college);
 
-    console.log("Name: " + name);
-    console.log("Get TID URL: " + "http://www.ratemyprofessors.com/search.jsp?queryoption=HEADER&queryBy=teacherName&schoolName=" +college+"&query=" + name)
+    //console.log("Name: " + name); // DEBUG
+    //console.log("Get TID URL: " +
+    //"http://www.ratemyprofessors.com/search.jsp?queryoption=HEADER&queryBy=teacherName&schoolName="
+    //+ college + "&query=" + name); // DEBUG
 
     var xhr = new XMLHttpRequest();
     xhr.open('GET', 'http://www.ratemyprofessors.com/search.jsp?queryoption=HEADER&queryBy=teacherName&schoolName=' +college+'&query=' + name, true);
@@ -107,11 +106,11 @@ function getTID(professor, college) {
         var tid = parseTID(this.response);
         // Check to make sure the TID is valid
         if(!isTID(tid)) {
-            console.log("Error with search...");
+            //console.log("Error with search..."); // DEBUG
             printError("Could not find that professor on RateMyProfessors. If the professor has " +
                        "a middle name try taking that out, or try another name altogether.");
         } else {
-            console.log("TID: " +tid);
+            //console.log("TID: " + tid); // DEBUG
             getRating(tid);
         }
     };
@@ -123,7 +122,7 @@ function getRating(tid) {
     var xhr = new XMLHttpRequest();
 
     var url = "http://www.ratemyprofessors.com/ShowRatings.jsp?tid=" + tid;
-    console.log("URL: " + url);
+    //console.log("URL: " + url); // DEBUG
 
     xhr.open('GET', 'http://www.ratemyprofessors.com/ShowRatings.jsp?tid='+tid, true);
     xhr.responseType = 'document';
