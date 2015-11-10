@@ -142,25 +142,37 @@ function viewRating(ratings, url) {
     document.getElementById("professor").value = ratings["name"];
 
     var numberRatings = document.getElementById('numRatings');
-    numberRatings.innerHTML = ratings["numRatings"];
+    numberRatings.innerHTML = ratings["number-of-ratings"];
 
     var overallRating = document.getElementById('overallRating');
-    overallRating.innerHTML = ratings["ratings"][0].innerHTML;
+    overallRating.innerHTML = ratings["overall-quality"];
 
     var gradeRating = document.getElementById('gradeRating');
-    gradeRating.innerHTML = ratings["ratings"][1].innerHTML;
+    gradeRating.innerHTML = ratings["average-grade"];
 
     var helpRating = document.getElementById('helpRating');
-    helpRating.innerHTML = ratings["ratings"][2].innerHTML;
+    helpRating.innerHTML = ratings["helpfulness"];
 
     var clarityRating = document.getElementById('clarityRating');
-    clarityRating.innerHTML = ratings["ratings"][3].innerHTML;
+    clarityRating.innerHTML = ratings["clarity"];
 
     var easyRating = document.getElementById('easyRating');
-    easyRating.innerHTML = ratings["ratings"][4].innerHTML;
+    easyRating.innerHTML = ratings["easiness"];
 
     var commentsBox = document.getElementById('comments');
-    commentsBox.innerHTML = ratings["comments"];
+    commentsHTML = "";
+    comments = ratings["comments"];
+    for(var i = 0; i < comments.length; i++) {
+        commentsHTML += "<div class=\"comment\"><div class=\"comment_rating\">";
+        commentsHTML += "<span class=\"com_rating\">Date: " + ratings["comments"][i]["date"] + "</span>";
+        commentsHTML += "<span class=\"com_rating\">Class: " + ratings["comments"][i]["class"] + "</span>";
+        commentsHTML += "<span class=\"com_rating\">Helpfulness: " + ratings["comments"][i]["helpfulness"] + "</span>";
+        commentsHTML += "<span class=\"com_rating\">Easiness: " + ratings["comments"][i]["easiness"] + "</span>";
+        commentsHTML += "<span class=\"com_rating\">Clarity: " + ratings["comments"][i]["clarity"] + "</span></div>";
+        commentsHTML += "<div class=\"comment_text\">" + ratings["comments"][i]["comment"];
+        commentsHTML += "</div></div>";
+    }
+    commentsBox.innerHTML = commentsHTML;
 
     var webLink = document.getElementById("webLink");
     webLink.innerHTML = "<a href=" + url + ">View full review on RateMyProfessors.com</a>";

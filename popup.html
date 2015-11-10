@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html style="width: 350px;">
+<html>
     <head>
         <script src="js/jquery.min.js"></script>
 
@@ -19,7 +19,7 @@
         <div id="errorArea" style="display:none;">
 
         </div>
-        <ul id="ratings" style="display:none;">
+        <div id="ratings" style="display:none;">
                 <div class="row">
                     <div>
                         <span class="label bigLabel">Overall Quality</span>
@@ -28,33 +28,36 @@
                         <span class="rating bigRating" id="overallRating">5.0</span>
                     </div>
                 </div>
+                <div class="row small_ratings">
+                    <div class="col">
+                        <span class="rating" id="gradeRating">A+</span>
+                        <span class="label">Average Grade</span>
+                    </div>
+                    <div class="col">
+                        <span class="rating" id="helpRating">5.0</span>
+                        <span class="label">Helpfulness</span>
+                    </div>
+                    <div class="col">
+                        <span class="rating" id="clarityRating">5.0</span>
+                        <span class="label">Clarity</span>
+                    </div>
+                    <div class="col">
+                        <span class="rating" id="easyRating">5.0</span>
+                        <span class="label">Easiness</span>
+                    </div>
+                </div>
                 <div class="row center">
                     Based on
                     <span id="numRatings">0</span>
                     ratings.
                 </div>
-                <li class="row">
-                    <span class="label">Average Grade</span>
-                    <span class="rating" id="gradeRating">A+</span>
-                </li>
-                <li class="row">
-                    <span class="label">Helpfulness</span>
-                    <span class="rating" id="helpRating">5.0</span>
-                </li>
-                <li class="row">
-                    <span class="label">Clarity</span>
-                    <span class="rating" id="clarityRating">5.0</span>
-                </li>
-                <li class="row">
-                    <span class="label">Easiness</span>
-                    <span class="rating" id="easyRating">5.0</span>
-                </li>
+
                 <div class="row" id="comments">
                 </div>
                 <div class="row center" id="webLink">
                 </div>
             </div>
-        </ul>
+        </div>
         <script src="js/help.js"></script>
         <script src="js/parse.js"></script>
         <script src="js/popup.js"></script>
